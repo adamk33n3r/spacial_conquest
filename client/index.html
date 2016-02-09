@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>spacial_conquest</title>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            console.log(io);
+            var socket = io();
+            function connect (username) {
+                if (!username) return;
+                socket.emit('user:new', {
+                    username: username
+                });
+            }
+            socket.on('user:new', function (data) {
+                console.log(data);
+            });
+        </script>
+    </head>
+    <body>
+        <p>This is a game, don't ya know?</p>
+        <input id="username" type="text"/>
+        <button type="button" onclick="connect(document.getElementById('username').value)">Connect</button>
+    </body>
+</html>
