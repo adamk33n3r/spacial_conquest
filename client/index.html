@@ -4,12 +4,11 @@
         <title>spacial_conquest</title>
         <script src="/socket.io/socket.io.js"></script>
         <script>
-            console.log(io);
             var socket = io();
             function connect (username) {
                 if (!username) return;
-                socket.emit('user:new', {
-                    username: username
+                socket.emit('user:login', {
+                    data: username
                 });
             }
             socket.on('user:new', function (data) {
