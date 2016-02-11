@@ -26,7 +26,10 @@
   },
   "homepage": "https://github.com/TyrenDe/spacial_conquest#readme",
   "dependencies": {
+    "ntypescript": "^1.201602092211.1",
     "phaser": "^2.4.4",
-    "socket.io": "^1.4.5"
+    "requirejs": "^2.1.22",
+    "socket.io": "^1.4.5",
+    "tsc": "^1.20150623.0"
   }
 }
