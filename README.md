@@ -13,3 +13,10 @@ A simple, yet large, space trading MMO game.
 9. Add weapons and combat
 10. Add AI pirates
 11. ... profit?
+
+## Dev setup
+```
+npm install
+typings install
+gulp
+```
