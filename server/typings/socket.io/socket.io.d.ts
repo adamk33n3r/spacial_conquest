@@ -1,10 +1,9 @@
-// Compiled using typings@0.6.7
-// Source: https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/4128f7af06c355e3526b7cf7cbb85e2e43bff167/socket.io/socket.io.d.ts
 // Type definitions for socket.io 1.4.4
 // Project: http://socket.io/
 // Definitions by: PROGRE <https://github.com/progre/>, Damian Connolly <https://github.com/divillysausages/>, Florent Poujol <https://github.com/florentpoujol/>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
+///<reference path='../node/node.d.ts' />
 
 declare module 'socket.io' {
 	var server: SocketIOStatic;

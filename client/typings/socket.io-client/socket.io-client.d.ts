@@ -1,5 +1,3 @@
-// Compiled using typings@0.6.7
-// Source: https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/495f2734927a644e913f9ed8f4d7d903f276f41d/socket.io-client/socket.io-client.d.ts
 // Type definitions for socket.io-client 1.4.4
 // Project: http://socket.io/
 // Definitions by: PROGRE <https://github.com/progre/>, Damian Connolly <https://github.com/divillysausages/>, Florent Poujol <https://github.com/florentpoujol/>
