@@ -1,5 +1,4 @@
-///<reference path='typings/tsd.d.ts' />
-///<reference path='../shared/Messages.ts' />
+///<reference path='typings/main.d.ts' />
 'use strict';
 
 import http = require('http');
@@ -8,18 +7,22 @@ import url = require('url');
 import path = require('path');
 import socketio = require('socket.io');
 
+import * as Messages from '../shared/Messages';
+import Client from './Client';
+console.log(Client);
 const config = require('./config.json');
 
 class GameServer {
-    testName: string = 'Fred';
     io: SocketIO.Server;
     fileServer: http.Server;
+    clients: Client[] = [];
 
     constructor() {
+        let j = new Messages.Message('');
         console.log('Starting file server...');
         this.fileServer = http.createServer(function (req: http.IncomingMessage, res: http.ServerResponse) {
             let uri = url.parse(req.url).pathname;
-            let filename = path.join(fs.realpathSync('../client'), uri);
+            let filename = path.join(fs.realpathSync(__dirname + '/../client'), uri);
 
             fs.access(filename, fs.F_OK, function(err: any) {
                 if (err) {
@@ -70,14 +73,9 @@ class GameServer {
         // TODO: Add standard logging framework like:
         //       https://github.com/bluejamesbond/Scribe.js
         console.log('New Connection!');
-        socket.on('msg:LoginMessage', this.onUserNew);
-    };
-
-    onUserNew = (socket: SocketIO.Socket, message: Messages.Message) => {
-        console.log('Got Login Message:', message);
-        // All other clients except for this one
-        this.broadcastMessage(socket, message);
+        this.clients.push(new Client(this, socket));
     };
 }
 
+module.exports = GameServer;
 export default GameServer;

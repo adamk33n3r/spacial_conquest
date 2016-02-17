@@ -26,14 +26,19 @@
   },
   "homepage": "https://github.com/TyrenDe/spacial_conquest#readme",
   "dependencies": {
+    "angular": "^1.5.0",
+    "angular-ui-router": "^0.2.18",
     "phaser": "^2.4.4",
     "socket.io": "^1.4.5"
   },
   "devDependencies": {
+    "browserify": "^13.0.0",
+    "glob-array": "^0.1.2",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
     "gulp-debug": "^2.1.2",
     "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.6.0",
     "gulp-tslint": "^4.3.2",
     "gulp-typescript": "^2.11.0",
     "gulp-uglify": "^1.5.2",
@@ -41,6 +46,7 @@
     "tsd": "^0.6.5",
     "tslint": "^3.3.0",
     "typescript": "^1.7.5",
-    "typings": "^0.6.8"
+    "typings": "^0.6.8",
+    "vinyl-source-stream": "^1.1.0"
   }
 }

@@ -1,19 +1,33 @@
-///<reference path='typings/tsd.d.ts' />
-///<reference path='../shared/Messages.ts' />
+///<reference path='typings/browser.d.ts' />
+'use strict';
 
-let socket: SocketIOClient.Socket = io();
+import * as Messages from '../shared/Messages';
 
-function connect (username: string) {
-    if (!username) return;
-    let lm: Messages.LoginMessage = new Messages.LoginMessage(username);
-    sendMessage(lm);
-}
+import angular = require('angular');
+angular.module('spacial_conquest', [])
+.controller('MainController', class {
+    test: string;
+    username: string;
+    socket: SocketIOClient.Socket;
+    constructor ($http: ng.IHttpService) {
+        this.test = 'This is a string defined in the controller!';
 
-function sendMessage(message: Messages.Message) {
-    console.log('Sending:', message);
-    socket.emit(message.type, message);
-}
+        this.socket = io();
 
-socket.on('msg:LoginMessage', function (data: Messages.LoginMessage) {
-    console.log('Login Message: ' + data.username);
+        this.socket.on('msg:LoginMessage', function (data: Messages.LoginMessage) {
+            console.log('Login Message: ' + data.username);
+        });
+    }
+
+    connect () {
+        if (!this.username) return;
+        let lm: Messages.LoginMessage = new Messages.LoginMessage(this.username);
+        this.sendMessage(lm);
+    }
+
+    sendMessage (message: Messages.Message) {
+        console.log('Sending:', message);
+        this.socket.emit(message.type, message);
+    }
 });
+

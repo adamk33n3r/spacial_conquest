@@ -1,3 +1,3 @@
-var server = new (require('./server'));
-
+var GameServer = require('./server');
+var server = new GameServer();
 server.start()

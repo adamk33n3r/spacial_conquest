@@ -1,9 +1,9 @@
-///<reference path='typings/tsd.d.ts' />
-///<reference path='../shared/Messages.ts' />
-import GameServer from './GameServer';
+///<reference path='typings/main.d.ts' />
 'use strict';
 
-const UserMessage = require('../shared/userMessage');
+import * as Messages from '../shared/Messages';
+// import Messages = require('../shared/Messages');
+import GameServer from './GameServer';
 
 class Client {
     server: GameServer;
@@ -17,19 +17,17 @@ class Client {
         /**
          * @param data LoginMessage
          */
-        let onUserLogin = (message: Messages.Message) => {
+        let onUserLogin = (message: Messages.LoginMessage) => {
             console.log('got login');
             console.log(message);
-            this.username = message.data;
+            this.username = message.username;
             // this.server.checkUsername(this.username);
 
             // Let everyone else now you logged in
-            this.sendBroadcast(new UserMessage('new', {
-                username: this.username
-            }));
+            this.sendBroadcast(new Messages.LoginMessage(this.username));
         };
 
-        this.socket.on('user:login', onUserLogin);
+        this.socket.on('msg:LoginMessage', onUserLogin);
     }
 
     sendMessage(message: Messages.Message) {
@@ -39,9 +37,10 @@ class Client {
 
     sendBroadcast(message: Messages.Message) {
         // To all other clients except for this one
-        this.socket.broadcast.emit(message.type, message.data);
+        console.log('Sending broadcast', message.type, message.data);
+        this.socket.broadcast.emit(message.type, message);
     }
 
 }
 
-module.exports = Client;
+export default Client;
