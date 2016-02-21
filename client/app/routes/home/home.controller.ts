@@ -1,11 +1,11 @@
-///<reference path='typings/browser.d.ts' />
+///<reference path='../../../typings/browser.d.ts' />
 'use strict';
 
-import * as Messages from '../shared/Messages';
+import * as Messages from '../../../../shared/Messages';
 
 import angular = require('angular');
-angular.module('spacial_conquest', [])
-.controller('MainController', class {
+angular.module('spacial_conquest')
+.controller('HomeController', class {
     test: string;
     username: string;
     socket: SocketIOClient.Socket;

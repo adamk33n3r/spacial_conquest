@@ -2,7 +2,6 @@
 'use strict';
 
 import * as Messages from '../shared/Messages';
-// import Messages = require('../shared/Messages');
 import GameServer from './GameServer';
 
 class Client {
@@ -14,13 +13,11 @@ class Client {
         this.server = server;
         this.socket = socket;
 
-        /**
-         * @param data LoginMessage
-         */
         let onUserLogin = (message: Messages.LoginMessage) => {
             console.log('got login');
             console.log(message);
             this.username = message.username;
+            // Check auth
             // this.server.checkUsername(this.username);
 
             // Let everyone else now you logged in
@@ -32,12 +29,12 @@ class Client {
 
     sendMessage(message: Messages.Message) {
         // To web client
-        this.socket.emit(message.type, message.data);
+        this.socket.emit(message.type, message);
     }
 
     sendBroadcast(message: Messages.Message) {
         // To all other clients except for this one
-        console.log('Sending broadcast', message.type, message.data);
+        console.log('Sending broadcast', message.type, message);
         this.socket.broadcast.emit(message.type, message);
     }
 

@@ -5,11 +5,9 @@
         <script src="/socket.io/socket.io.js"></script>
         <script src="/vendor.js"></script>
         <script src="/index.js"></script>
+        <base href="/">
     </head>
-    <body ng-app="spacial_conquest" ng-controller="MainController as main">
-        <p>This is a game, don't ya know?</p>
-        <p ng-bind="main.test"></p>
-        <input id="username" type="text" ng-model="main.username" />
-        <button type="button" ng-click="main.connect()">Connect</button>
+    <body ng-app="spacial_conquest">
+        <div ui-view></div>
     </body>
 </html>

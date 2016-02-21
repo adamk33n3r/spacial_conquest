@@ -1,78 +1,60 @@
 ///<reference path='typings/main.d.ts' />
 'use strict';
 
-import http = require('http');
-import fs = require('fs');
-import url = require('url');
-import path = require('path');
-import socketio = require('socket.io');
+import * as fs from 'fs';
+import * as url from 'url';
+import * as http from 'http';
+import * as path from 'path';
+import * as morgan from 'morgan';
+import * as express from 'express';
+import * as socketio from 'socket.io';
 
 import * as Messages from '../shared/Messages';
 import Client from './Client';
-console.log(Client);
-const config = require('./config.json');
+// declare var scribe: any;
+const scribe = require('scribe-js')();
+const console = (<any>process).console;
+const config = require('configamajig')();
 
 class GameServer {
     io: SocketIO.Server;
-    fileServer: http.Server;
+    express: express.Application;
+    httpServer: http.Server;
     clients: Client[] = [];
 
     constructor() {
         let j = new Messages.Message('');
-        console.log('Starting file server...');
-        this.fileServer = http.createServer(function (req: http.IncomingMessage, res: http.ServerResponse) {
-            let uri = url.parse(req.url).pathname;
-            let filename = path.join(fs.realpathSync(__dirname + '/../client'), uri);
-
-            fs.access(filename, fs.F_OK, function(err: any) {
-                if (err) {
-                    res.writeHead(404, {'Content-Type': 'text/plain'});
-                    res.write('404 Not Found\n');
-                    res.end();
-                    return;
-                }
-
-                if (fs.statSync(filename).isDirectory()) filename += '/index.html';
-
-                fs.readFile(filename, 'binary', function(err: NodeJS.ErrnoException, file: Buffer) {
-                    if (err) {
-                        res.writeHead(500, {'Content-Type': 'text/plain'});
-                        res.write(err + '\n');
-                    } else {
-                        res.writeHead(200);
-                        res.write(file, 'binary');
-                    }
-
-                    res.end();
-                });
-            });
+        console.log('Setting up file server...');
+        this.express = express();
+        this.httpServer = http.createServer(<any>this.express);
+        // this.express.use(scribe.express.logger());
+        this.express.use('/logs', scribe.webPanel());
+        this.express.use(morgan('dev'));
+        this.express.use(express.static(process.cwd() + '/client'));
+        this.express.get('/', function (res: any) {
+            res.send('index.html');
         });
 
         // Socket.io
-        console.log('Starting socket io...');
-        this.io = socketio(this.fileServer);
+        console.log('Setting up socket.io...');
+        this.io = socketio(this.httpServer);
         this.io.on('connection', this.onConnection);
     }
 
     start() {
-        this.fileServer.listen(config.port);
-        console.log('Listening on port: ' + config.port);
-    }
-
-    sendMessage(message: Messages.Message) {
-        console.log('Sending:', message);
-        this.io.send(message.type, message);
-    }
-
-    broadcastMessage(socket: SocketIO.Socket, message: Messages.Message) {
-        console.log('Broadcasting:', message);
-        socket.broadcast.emit(message.type, message);
+        setImmediate(() => {
+            this.httpServer.listen(config.port, config.ip, () => {
+                console.log('Express server listening on %d, in %s mode', config.port, this.express.get('env'));
+            });
+        });
     }
 
     onConnection = (socket: SocketIO.Socket) => {
         // TODO: Add standard logging framework like:
         //       https://github.com/bluejamesbond/Scribe.js
-        console.log('New Connection!');
+        let address: string = socket.request.connection.remoteAddress;
+        let port: number = socket.request.connection.remotePort;
+        console.log('New Connection from ' + address + ':' + port + '!');
         this.clients.push(new Client(this, socket));
     };
 }
