@@ -21,5 +21,6 @@ cd server
 typings install
 cd ../client
 typings install
-gulp
+cd ..
+gulp serve
 ```
