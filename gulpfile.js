@@ -27,7 +27,7 @@ var clientDeps = [
 
 
 // Typescript settings
-var clientJadeGlob = ['client/app/**/*.jade'];
+var clientJadeGlob = ['client/**/*.jade'];
 var clientJSGlob = ['client/**/*.js', '!client/index*.js', '!client/vendor*.js'];
 var clientTSGlob = ['client/**/*.ts', '!client/typings{,/**}'];
 var sharedTSGlob = ['shared/**/*.ts', '!shared/typings{,/**}'];
@@ -112,7 +112,7 @@ gulp.task('compile:jade', function () {
         .pipe(jade({
             pretty: true
         }))
-        .pipe(gulp.dest('client/app'));
+        .pipe(gulp.dest('client'));
 });
 
 // Browserify
