@@ -23,7 +23,6 @@ class GameServer {
     clients: Client[] = [];
 
     constructor() {
-        let j = new Messages.Message('');
         console.log('Setting up file server...');
         this.express = express();
         this.httpServer = http.createServer(<any>this.express);
