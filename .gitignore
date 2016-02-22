@@ -40,6 +40,7 @@ node_modules
 # Project ignores #
 ###################
 
+client/**/*.html
 client/**/*.js
 shared/**/*.js
 server/**/*.js
