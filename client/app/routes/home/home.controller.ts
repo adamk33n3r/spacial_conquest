@@ -3,8 +3,9 @@
 
 import * as Messages from '../../../../shared/Messages';
 
-import angular = require('angular');
+import Phaser = require('phaser');
 
+import angular = require('angular');
 angular.module('spacial_conquest')
 .controller('HomeController', class {
     test: string;
