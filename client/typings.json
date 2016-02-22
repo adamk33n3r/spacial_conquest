@@ -3,6 +3,9 @@
     "angular": "github:DefinitelyTyped/DefinitelyTyped/angularjs/angular.d.ts#1c4a34873c9e70cce86edd0e61c559e43dfa5f75",
     "angular-ui-router": "github:DefinitelyTyped/DefinitelyTyped/angular-ui-router/angular-ui-router.d.ts#655f8c1bf3c71b0e1ba415b36309604f79326ac8",
     "jquery": "github:DefinitelyTyped/DefinitelyTyped/jquery/jquery.d.ts#fab0b336b0414fac23963bde83f7d7077f6cf14c",
+    "phaser": "github:photonstorm/phaser/typescript/phaser.d.ts#9acf7c223e51c47819050d6a37b66cb700fdef82",
+    "pixi": "github:photonstorm/phaser/typescript/pixi.d.ts#9acf7c223e51c47819050d6a37b66cb700fdef82",
+    "p2": "github:photonstorm/phaser/typescript/p2.d.ts#9acf7c223e51c47819050d6a37b66cb700fdef82",
     "socket.io-client": "github:DefinitelyTyped/DefinitelyTyped/socket.io-client/socket.io-client.d.ts#bcd5761826eb567876c197ccc6a87c4d05731054"
   }
 }

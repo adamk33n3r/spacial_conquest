@@ -1,11 +1,9 @@
 ///<reference path='../../../typings/browser.d.ts' />
-///<reference path='../../../../node_modules/phaser/typescript/phaser.d.ts' />
 'use strict';
 
 import * as Messages from '../../../../shared/Messages';
 
 import angular = require('angular');
-import phaser = require('phaser');
 
 angular.module('spacial_conquest')
 .controller('HomeController', class {
