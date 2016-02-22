@@ -10,6 +10,7 @@ var source = require('vinyl-source-stream');
 var browserify = require('browserify');
 var sourcemaps = require('gulp-sourcemaps');
 var server = require('gulp-develop-server');
+var jade = require('gulp-jade');
 
 // Adds sourcemap info
 var DEBUG = {
@@ -26,6 +27,7 @@ var clientDeps = [
 
 
 // Typescript settings
+var clientJadeGlob = ['client/app/**/*.jade'];
 var clientJSGlob = ['client/**/*.js', '!client/index*.js', '!client/vendor*.js'];
 var clientTSGlob = ['client/**/*.ts', '!client/typings{,/**}'];
 var sharedTSGlob = ['shared/**/*.ts', '!shared/typings{,/**}'];
@@ -79,7 +81,7 @@ gulp.task('lint:server', function () {
 });
 
 // Compile
-gulp.task('compile', ['compile:client', 'compile:shared', 'compile:server']);
+gulp.task('compile', ['compile:jade', 'compile:client', 'compile:shared', 'compile:server']);
 
 // Compile client
 gulp.task('compile:client', ['lint:client'], function () {
@@ -102,6 +104,15 @@ gulp.task('compile:server', ['compile:shared', 'lint:server'], function () {
     return gulp.src(serverTSGlob)
         .pipe(ts(tsServerProject))
         .pipe(gulp.dest('server'));
+});
+
+// Compile jade
+gulp.task('compile:jade', function () {
+    return gulp.src(clientJadeGlob)
+        .pipe(jade({
+            pretty: true
+        }))
+        .pipe(gulp.dest('client/app'));
 });
 
 // Browserify
@@ -136,6 +147,10 @@ gulp.task('minify', ['browserify:client'], function () {
 });
 
 // Watch files for changes
+gulp.task('watch:jade', function () {
+    gulp.watch(clientJadeGlob, ['compile:jade']);
+});
+
 gulp.task('watch:client', function () {
     gulp.watch(clientTSGlob, ['minify']);
 });
@@ -160,7 +175,7 @@ gulp.task('server:restart', ['compile:server'], function () {
 });
 
 // Watch
-gulp.task('watch', ['default', 'watch:client', 'watch:shared', 'watch:server']);
+gulp.task('watch', ['default', 'watch:jade', 'watch:client', 'watch:shared', 'watch:server']);
 
 // Default
 gulp.task('default', ['compile', 'browserify:vendor', 'minify']);
