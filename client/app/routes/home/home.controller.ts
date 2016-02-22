@@ -14,14 +14,14 @@ angular.module('spacial_conquest')
 
         this.socket = io();
 
-        this.socket.on('msg:LoginMessage', function (data: Messages.LoginMessage) {
+        this.socket.on(Messages.NewUserMessage.type, function (data: Messages.LoginMessage) {
             console.log('Login Message: ' + data.username);
         });
     }
 
     connect () {
         if (!this.username) return;
-        let lm: Messages.LoginMessage = new Messages.LoginMessage(this.username);
+        let lm: Messages.LoginMessage = new Messages.LoginMessage(this.username, null);
         this.sendMessage(lm);
     }
 

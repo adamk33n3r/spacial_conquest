@@ -21,10 +21,10 @@ class Client {
             // this.server.checkUsername(this.username);
 
             // Let everyone else now you logged in
-            this.sendBroadcast(new Messages.LoginMessage(this.username));
+            this.sendBroadcast(new Messages.NewUserMessage(this.username));
         };
 
-        this.socket.on('msg:LoginMessage', onUserLogin);
+        this.socket.on(Messages.LoginMessage.type, onUserLogin);
     }
 
     sendMessage(message: Messages.Message) {

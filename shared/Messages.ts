@@ -1,28 +1,31 @@
-export class Message {
-    type: string;
-    data: any;
+export abstract class Message {
+    static type: string;
 
-    constructor(type: string, data: any = null) {
-        this.type = type;
-        this.data = data;
+    constructor() {
+    }
+
+    get type () {
+        return Object.getPrototypeOf(this).constructor.type;
     }
 }
 
 export class LoginMessage extends Message {
-    // TODO: Maybe switch these?
+    static type: string = 'LoginMessage';
     username: string;
-    get data(): string {
-        return this.username;
-    }
+    password: string;
 
-    constructor(name: string) {
-        super('msg:LoginMessage');
-        this.username = name;
+    constructor(username: string, password: string) {
+        super();
+        this.username = username;
+        this.password = password;
     }
 }
 
-export class UserMessage extends Message {
-    constructor(subtype: string, data: any) {
-        super(`msg:UserMessage:${subtype}`, data);
+export class NewUserMessage extends Message {
+    static type: string = 'NewUserMessage';
+    username: string;
+    constructor(username: string) {
+        super();
+        this.username = username;
     }
 }
