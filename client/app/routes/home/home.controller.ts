@@ -14,8 +14,8 @@ angular.module('spacial_conquest')
 
         this.socket = io();
 
-        this.socket.on(Messages.NewUserMessage.type, function (data: Messages.LoginMessage) {
-            console.log('Login Message: ' + data.username);
+        this.socket.on(Messages.NewUserMessage.type, function (data: Messages.NewUserMessage) {
+            console.log('New User Message: ' + data.username);
         });
     }
 

@@ -2,7 +2,7 @@
 A simple, yet large, space trading MMO game.
 
 ## Development Plans
-1. Stand up server/client and connect with websockets (Socket.io)
+1. Stand up server/client and connect with websockets (Socket.io) [DONE]
 2. Render a background that can display a simple starfield (Phaser.js)
 3. Allow players to move freely with simple login
 4. Add physics to make it spacey (client simulated, server enforced)
@@ -17,6 +17,9 @@ A simple, yet large, space trading MMO game.
 ## Dev setup
 ```
 npm install
+cd server
+typings install
+cd ../client
 typings install
 gulp
 ```
