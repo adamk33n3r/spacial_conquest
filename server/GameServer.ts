@@ -30,8 +30,8 @@ class GameServer {
         this.express.use('/logs', scribe.webPanel());
         this.express.use(morgan('dev'));
         this.express.use(express.static(process.cwd() + '/client'));
-        this.express.get('/', function (res: any) {
-            res.send('index.html');
+        this.express.get('/*', function (req: any, res: any) {
+            res.sendFile(path.resolve('client/index.html'));
         });
 
         // Socket.io
@@ -49,8 +49,6 @@ class GameServer {
     }
 
     onConnection = (socket: SocketIO.Socket) => {
-        // TODO: Add standard logging framework like:
-        //       https://github.com/bluejamesbond/Scribe.js
         let address: string = socket.request.connection.remoteAddress;
         let port: number = socket.request.connection.remotePort;
         console.log('New Connection from ' + address + ':' + port + '!');
