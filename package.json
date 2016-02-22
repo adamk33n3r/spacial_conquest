@@ -32,8 +32,7 @@
     "express": "^4.13.4",
     "extend": "^3.0.0",
     "morgan": "^1.7.0",
-    "phaser": "^2.4.6",
-    "pixi.js": "^3.0.9",
+    "phaser": "^2.4.4",
     "scribe-js": "^2.0.4",
     "socket.io": "^1.4.5"
   },
