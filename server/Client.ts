@@ -14,9 +14,9 @@ class Client {
         this.socket = socket;
 
         let onUserLogin = (message: Messages.LoginMessage) => {
-            console.log('got login');
-            console.log(message);
+            console.log('LoginMessage:', message);
             this.username = message.username;
+
             // Check auth
             // this.server.checkUsername(this.username);
 
@@ -34,7 +34,7 @@ class Client {
 
     sendBroadcast(message: Messages.Message) {
         // To all other clients except for this one
-        console.log('Sending broadcast', message.type, message);
+        console.log('Sending Broadcast:', message.type, message);
         this.socket.broadcast.emit(message.type, message);
     }
 

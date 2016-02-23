@@ -1,14 +1,16 @@
-p This is a game, don't ya know?
-p(ng-bind="home.test")
-#gameContent
-p Username: {{ home.username }}
 .panel.panel-default
   .panel-body
     form.form-horizontal
       .form-group
+        #gameContent.col-lg-10.col-lg-offset-2
+      .form-group
         label.control-label.col-lg-2(for="username") Username:
         .col-lg-10
           input#username.form-control(type="text", ng-model="home.username")
+      .form-group
+        label.control-label.col-lg-2(for="password") Password:
+        .col-lg-10
+          input#username.form-control(type="password", ng-model="home.password")
       .form-group
         .col-lg-10.col-lg-offset-2
           button.btn.btn-success(type="button", ng-click="home.connect()") Connect
