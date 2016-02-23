@@ -2,21 +2,35 @@
 'use strict';
 
 import * as Messages from '../../../../shared/Messages';
+import Spaceship from '../../game/Spaceship';
+import Enemy from '../../game/Enemy';
 
 import Phaser = require('phaser');
 
 import angular = require('angular');
 angular.module('spacial_conquest')
-.controller('HomeController', class {
-    test: string;
+.controller('HomeController', class HomeController {
     username: string;
+    password: string;
+
     socket: SocketIOClient.Socket;
     game: Phaser.Game;
 
-    constructor ($http: ng.IHttpService) {
-        this.test = 'This is a string defined in the controller!';
+    starfield: Phaser.TileSprite;
 
-        this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameContent', { preload: this.preload, create: this.create });
+    p1: Spaceship;
+
+    constructor ($http: ng.IHttpService) {
+        this.game = new Phaser.Game(
+            800,
+            600,
+            Phaser.AUTO,
+            'gameContent',
+            {
+                preload: this.preload,
+                create: this.create,
+                update: this.update
+            });
 
         this.socket = io();
         this.socket.on(Messages.NewUserMessage.type, function (data: Messages.NewUserMessage) {
@@ -25,8 +39,9 @@ angular.module('spacial_conquest')
     }
 
     connect () {
-        if (!this.username) return;
-        let lm: Messages.LoginMessage = new Messages.LoginMessage(this.username, null);
+        if (!this.username || !this.password) return;
+
+        let lm: Messages.LoginMessage = new Messages.LoginMessage(this.username, this.password);
         this.sendMessage(lm);
     }
 
@@ -36,12 +51,22 @@ angular.module('spacial_conquest')
     }
 
     preload() {
-        this.game.load.image('top-secret', 'images/top-secret.jpg');
+        this.game.load.image('starfield', 'images/starfield.png');
+        this.game.load.image('player', 'images/player.png');
     }
 
     create() {
-        let topSecret: Phaser.Sprite = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'top-secret');
-        topSecret.anchor.setTo(0.5, 0.5);
+        this.game.physics.startSystem(Phaser.Physics.ARCADE);
+        this.game.world.setBounds(0, 0, 1600, 1200);
+
+        this.starfield = this.game.add.tileSprite(0, 0, 1600, 1200, 'starfield');
+
+        this.p1 = new Spaceship(this.game);
+    }
+
+    update() {
+        if (this.p1 != null) {
+            this.p1.update(this.game);
+        }
     }
 });
-
