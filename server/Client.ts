@@ -4,7 +4,7 @@
 import * as Messages from '../shared/Messages';
 import GameServer from './GameServer';
 
-class Client {
+export default class Client {
     server: GameServer;
     socket: SocketIO.Socket;
     username: string;
@@ -39,5 +39,3 @@ class Client {
     }
 
 }
-
-export default Client;

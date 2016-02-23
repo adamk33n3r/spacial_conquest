@@ -1,7 +1,7 @@
 ///<reference path='../../../typings/browser.d.ts' />
 'use strict';
 
-import * as Messages from '../../../../shared/Messages';
+import {Message, NewUserMessage, LoginMessage} from '../../../../shared/Messages';
 
 import Phaser = require('phaser');
 
@@ -19,18 +19,19 @@ angular.module('spacial_conquest')
         this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameContent', { preload: this.preload, create: this.create });
 
         this.socket = io();
-        this.socket.on(Messages.NewUserMessage.type, function (data: Messages.NewUserMessage) {
+        this.socket.on(NewUserMessage.type, function (data: NewUserMessage) {
             console.log('New User Message: ' + data.username);
         });
+        console.log();
     }
 
     connect () {
         if (!this.username) return;
-        let lm: Messages.LoginMessage = new Messages.LoginMessage(this.username, null);
+        let lm: LoginMessage = new LoginMessage(this.username, null);
         this.sendMessage(lm);
     }
 
-    sendMessage (message: Messages.Message) {
+    sendMessage (message: Message) {
         console.log('Sending:', message);
         this.socket.emit(message.type, message);
     }
