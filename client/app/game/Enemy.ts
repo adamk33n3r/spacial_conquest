@@ -1,7 +1,7 @@
 export default class Enemy {
-    constructor(game: Phaser.Game) {
+    constructor() {
     }
 
-    update(game: Phaser.Game) {
+    update() {
     }
 }
