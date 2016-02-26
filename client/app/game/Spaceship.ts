@@ -1,54 +1,69 @@
+import * as Messages from '../../../shared/Messages';
+
 export default class Spaceship {
-    static ACCELERATION: number = 400;
-    static ROTATION: number = 300;
-    static DRAG: number = 200;
-    static ANGULARDRAG: number = 200;
-    static MAXSPEED: number = 400;
+    // game: Phaser.Game;
+    // player: Phaser.Sprite;
+    // body: Phaser.Physics.P2.Body;
+    // cursors: Phaser.CursorKeys;
+    move: Messages.Movements;
 
-    player: Phaser.Sprite;
-    cursors: Phaser.CursorKeys;
+    constructor(follow: boolean) {
+        // this.game = game;
+        // this.player = this.game.add.sprite(0, 0, 'player');
+        // this.player.anchor.setTo(0.5, 0.5);
+        // this.game.physics.p2.enable(this.player, true);
 
-    constructor(game: Phaser.Game) {
-        this.player = game.add.sprite(game.world.centerX, game.world.centerY, 'player');
-        this.player.anchor.setTo(0.5, 0.5);
-        game.physics.enable(this.player);
-        this.player.body.collideWorldBounds = true;
+        // this.body = this.player.body;
+        // this.body.mass = 1;
+        // this.body.collideWorldBounds = true;
 
-        this.player.body.maxVelocity.setTo(Spaceship.MAXSPEED, Spaceship.MAXSPEED);
-        this.player.body.maxAngular = Spaceship.MAXSPEED;
-        this.player.body.drag.setTo(Spaceship.DRAG, Spaceship.DRAG);
-        this.player.body.angularDrag = Spaceship.ANGULARDRAG;
+        if (follow) {
+            // this.game.camera.follow(this.body.sprite);
+        }
 
-        game.camera.follow(this.player);
-
-        this.cursors = game.input.keyboard.createCursorKeys();
+        // this.cursors = game.input.keyboard.createCursorKeys();
     }
 
-    update(game: Phaser.Game) {
-        if (this.cursors.left.isDown) {
-            this.player.body.angularAcceleration = -Spaceship.ROTATION;
-        }
-        else if (this.cursors.right.isDown) {
-            this.player.body.angularAcceleration = Spaceship.ROTATION;
-        }
-        else {
-            this.player.body.angularAcceleration = 0;
-        }
+    destroy() {
+        // this.player.destroy();
+    }
 
+    setState(
+        position: number[],
+        velocity: number[],
+        force: number[],
+        angle: number,
+        angularVelocity: number,
+        angularForce: number) {
+        /*
+        this.body.data.position = position;
+        this.body.data.velocity = velocity;
+        this.body.data.force = force;
+        this.body.data.angle = angle;
+        this.body.data.angularVelocity = angularVelocity;
+        this.body.data.angularForce = angularForce;
+        */
+    }
+
+    update() {
+        let oldMovement: Messages.Movements = this.move;
+
+        this.move = Messages.Movements.Idle;
+        /*
         if (this.cursors.up.isDown) {
-            game.physics.arcade.accelerationFromRotation(
-                this.player.rotation,
-                Spaceship.ACCELERATION,
-                this.player.body.acceleration);
+            this.move |= Messages.Movements.ForwardThrust;
         }
         else if (this.cursors.down.isDown) {
-            game.physics.arcade.accelerationFromRotation(
-                this.player.rotation,
-                -Spaceship.ACCELERATION,
-                this.player.body.acceleration);
+            this.move |= Messages.Movements.ReverseThrust;
         }
-        else {
-            this.player.body.acceleration.set(0);
+
+        if (this.cursors.left.isDown) {
+            this.move |= Messages.Movements.LeftThrust;
         }
+        else if (this.cursors.right.isDown) {
+            this.move |= Messages.Movements.RightThrust;
+        }
+        */
+        return (oldMovement !== this.move);
     }
 }
