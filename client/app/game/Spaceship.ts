@@ -1,31 +1,24 @@
 import * as Messages from '../../../shared/Messages';
 
 export default class Spaceship {
-    // game: Phaser.Game;
-    // player: Phaser.Sprite;
-    // body: Phaser.Physics.P2.Body;
-    // cursors: Phaser.CursorKeys;
+    player: PIXI.Sprite;
+    stage: PIXI.Container;
     move: Messages.Movements;
 
-    constructor(follow: boolean) {
-        // this.game = game;
-        // this.player = this.game.add.sprite(0, 0, 'player');
-        // this.player.anchor.setTo(0.5, 0.5);
-        // this.game.physics.p2.enable(this.player, true);
+    constructor(stage: PIXI.Container, follow: boolean) {
+        this.stage = stage;
 
-        // this.body = this.player.body;
-        // this.body.mass = 1;
-        // this.body.collideWorldBounds = true;
-
-        if (follow) {
-            // this.game.camera.follow(this.body.sprite);
-        }
-
-        // this.cursors = game.input.keyboard.createCursorKeys();
+        let texture: PIXI.Texture = PIXI.Texture.fromImage('/images/player.png');
+        this.player = new PIXI.Sprite(texture);
+        this.player.anchor.x = 0.5;
+        this.player.anchor.y = 0.5;
+        this.player.position.x = 100;
+        this.player.position.y = 100;
+        this.stage.addChild(this.player);
     }
 
     destroy() {
-        // this.player.destroy();
+        this.stage.removeChild(this.player);
     }
 
     setState(
