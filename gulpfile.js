@@ -22,13 +22,15 @@ var DEBUG = {
 var clientDeps = [
     'angular',
     'angular-ui-router',
-    'phaser'
+    'jquery',
+    'p2',
+    'pixi.js'
 ];
 
 
 // Typescript settings
 var clientJadeGlob = ['client/**/*.jade'];
-var clientJSGlob = ['client/**/*.js', '!client/index*.js', '!client/vendor*.js'];
+var clientJSGlob = ['client/**/*.js', '!client/index*.js', '!client/vendor*.js', '!client/typings{,/**}'];
 var clientTSGlob = ['client/**/*.ts', '!client/typings{,/**}'];
 var sharedTSGlob = ['shared/**/*.ts', '!shared/typings{,/**}'];
 var serverTSGlob = ['server/**/*.ts', '!server/typings{,/**}'];

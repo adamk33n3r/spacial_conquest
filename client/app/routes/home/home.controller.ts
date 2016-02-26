@@ -5,7 +5,8 @@ import * as Messages from '../../../../shared/Messages';
 import Spaceship from '../../game/Spaceship';
 import Enemy from '../../game/Enemy';
 
-// import Phaser = require('phaser');
+import PIXI = require('pixi.js');
+import $ = require('jquery');
 
 import angular = require('angular');
 angular.module('spacial_conquest')
@@ -14,25 +15,27 @@ angular.module('spacial_conquest')
     password: string;
 
     socket: SocketIOClient.Socket;
-    // game: Phaser.Game;
 
-    // starfield: Phaser.TileSprite;
+    renderer: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
+    stage: PIXI.Container;
 
     ships: { [id: string]: Spaceship; } = { };
     myShip: Spaceship;
 
     constructor ($http: ng.IHttpService) {
-        /*this.game = new Phaser.Game(
-            800,
-            600,
-            Phaser.AUTO,
-            'gameContent',
-            {
-                preload: this.preload,
-                create: this.create,
-                update: this.update
-            });*/
+        let gameContent: any = $('#gameContent')[0];
+        this.renderer = PIXI.autoDetectRenderer(800, 600, { view: gameContent });
 
+        this.stage = new PIXI.Container();
+
+        let starfield: PIXI.Texture = PIXI.Texture.fromImage('/images/starfield.png');
+        let tilingSprite: PIXI.extras.TilingSprite = new PIXI.extras.TilingSprite(
+            starfield,
+            this.renderer.width,
+            this.renderer.height);
+        this.stage.addChild(tilingSprite);
+
+        requestAnimationFrame(this.animate);
 
         this.socket = io();
         this.socket.on(Messages.NewUserMessage.type, this.onNewUserMessage);
@@ -40,10 +43,17 @@ angular.module('spacial_conquest')
         this.socket.on(Messages.LeftUserMessage.type, this.onLeftUserMessage);
     }
 
+    animate = () => {
+        requestAnimationFrame(this.animate);
+
+        // render the container
+        this.renderer.render(this.stage);
+    };
+
     onNewUserMessage = (msg: Messages.NewUserMessage) => {
         // Create a new spaceship
-        console.log('create ship for: ', msg);
-        this.ships[msg.username] = new Spaceship(false);
+        console.log('create ship for: ', msg.username);
+        this.ships[msg.username] = new Spaceship(this.stage, false);
     };
 
     onMoveUserMessage = (msg: Messages.MoveUserMessage) => {
@@ -73,7 +83,7 @@ angular.module('spacial_conquest')
     connect () {
         if (!this.username || !this.password) return;
 
-        this.myShip = new Spaceship(true);
+        this.myShip = new Spaceship(this.stage, true);
         this.ships[this.username] = this.myShip;
 
         let lm: Messages.LoginMessage = new Messages.LoginMessage(this.username, this.password);

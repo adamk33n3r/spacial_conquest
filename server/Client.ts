@@ -25,7 +25,9 @@ class Client {
 
         // Tell newly connected user about everyone else
         this.server.clients.forEach((client) => {
-            this.sendMessage(new Messages.NewUserMessage(client.username));
+            if (client.username) {
+                this.sendMessage(new Messages.NewUserMessage(client.username));
+            }
         });
 
         this.socket.on('disconnect', () => {
