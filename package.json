@@ -28,12 +28,16 @@
   "dependencies": {
     "angular": "^1.5.0",
     "angular-ui-router": "^0.2.18",
+    "bluebird": "^3.3.1",
     "configamajig": "^1.0.1",
     "express": "^4.13.4",
     "extend": "^3.0.0",
+    "mongoose": "^4.4.4",
+    "mongoose-bird": "0.0.1",
     "morgan": "^1.7.0",
+    "p2": "^0.7.1",
     "phaser": "github:notnullgames/phaser",
-    "pixi.js": "^2.2.9",
+    "pixi.js": "^3.0.9",
     "scribe-js": "^2.0.4",
     "socket.io": "^1.4.5"
   },

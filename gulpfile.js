@@ -22,35 +22,21 @@ var DEBUG = {
 var clientDeps = [
     'angular',
     'angular-ui-router',
-    'phaser'
+    'p2',
+    'pixi.js'
 ];
 
 
 // Typescript settings
 var clientJadeGlob = ['client/**/*.jade'];
-var clientJSGlob = ['client/**/*.js', '!client/index*.js', '!client/vendor*.js'];
-var clientTSGlob = ['client/**/*.ts', '!client/typings{,/**}'];
-var sharedTSGlob = ['shared/**/*.ts', '!shared/typings{,/**}'];
-var serverTSGlob = ['server/**/*.ts', '!server/typings{,/**}'];
+var clientJSGlob = ['client/app/**/*.js'];
+var clientTSGlob = ['client/**/*.ts', '!client/typings/**/!(browser.d.ts)'];
+var sharedTSGlob = ['shared/**/*.ts', '!shared/typings/**'];
+var serverTSGlob = ['server/**/*.ts', '!server/typings/**'];
 
-var tsClientProject = {
-    module: 'commonjs',
-    noImplicitAny: true,
-    target: 'ES5',
-    baseUrl: '.'
-};
-
-var tsSharedProject = {
-    module: 'commonjs',
-    noImplicitAny: true,
-    target: 'ES5'
-};
-
-var tsServerProject = {
-    module: 'commonjs',
-    noImplicitAny: true,
-    target: 'ES5'
-};
+var tsClientProject = ts.createProject('tsconfig.json');
+var tsSharedProject = ts.createProject('tsconfig.json');
+var tsServerProject = ts.createProject('tsconfig.json');
 
 process.once('SIGINT', function () {
     process.exit(0);
@@ -164,14 +150,19 @@ gulp.task('watch:server', function () {
 });
 
 // Start server
+var serverRunning = false;
 gulp.task('serve', ['watch'], function () {
     server.listen({
         path: './index.js'
     });
+    serverRunning = true;
 });
 
 gulp.task('server:restart', ['compile:server'], function () {
-    server.restart();
+    if (serverRunning) {
+        server.restart();
+        serverRunning = true;
+    }
 });
 
 // Watch

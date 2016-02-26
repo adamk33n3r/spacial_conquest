@@ -1,4 +1,3 @@
-///<reference path='../typings/browser.d.ts' />
 'use strict';
 declare var require: any;
 import angular = require('angular');
