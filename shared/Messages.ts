@@ -1,3 +1,5 @@
+'use strict';
+
 export abstract class Message {
     static type: string;
 

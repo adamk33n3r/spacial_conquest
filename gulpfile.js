@@ -32,7 +32,8 @@ var clientJadeGlob = ['client/**/*.jade'];
 var clientJSGlob = ['client/app/**/*.js'];
 var clientTSGlob = ['client/**/*.ts', '!client/typings/**/!(browser.d.ts)'];
 var sharedTSGlob = ['shared/**/*.ts', '!shared/typings/**'];
-var serverTSGlob = ['server/**/*.ts', '!server/typings/**'];
+var serverTSGlob = ['server/**/*.ts', '!server/typings/**/!(main.d.ts)'];
+var serverTSLintGlob = ['server/**/*.ts', '!server/typings/**'];
 
 var tsClientProject = ts.createProject('tsconfig.json');
 var tsSharedProject = ts.createProject('tsconfig.json');
@@ -63,7 +64,7 @@ gulp.task('lint:shared', function () {
 
 // Lint server
 gulp.task('lint:server', function () {
-    return lint(gulp.src(serverTSGlob));
+    return lint(gulp.src(serverTSLintGlob));
 });
 
 // Compile
@@ -142,7 +143,7 @@ gulp.task('watch:client', function () {
 });
 
 gulp.task('watch:shared', function () {
-    gulp.watch(sharedTSGlob, ['compile:shared']);
+    gulp.watch(sharedTSGlob, ['compile:shared', 'server:restart']);
 });
 
 gulp.task('watch:server', function () {

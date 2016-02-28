@@ -1,15 +1,14 @@
-///<reference path='typings/main.d.ts' />
 'use strict';
 
 import * as Messages from '../shared/Messages';
-import GameServer from './GameServer';
+import Game from './Game';
 
 export default class Client {
-    server: GameServer;
+    server: Game;
     socket: SocketIO.Socket;
     username: string;
 
-    constructor(server: GameServer, socket: SocketIO.Socket) {
+    constructor(server: Game, socket: SocketIO.Socket) {
         this.server = server;
         this.socket = socket;
 
