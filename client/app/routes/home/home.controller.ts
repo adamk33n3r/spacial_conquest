@@ -9,6 +9,7 @@ import PIXI = require('pixi.js');
 import angular = require('angular');
 angular.module('spacial_conquest')
 .controller('HomeController', class {
+    $http: ng.IHttpService;
     username: string;
     password: string;
 
@@ -21,6 +22,8 @@ angular.module('spacial_conquest')
     myShip: Spaceship;
 
     constructor ($http: ng.IHttpService) {
+        this.$http = $http;
+
         let gameContent = <HTMLCanvasElement>document.getElementById('gameContent');
         this.renderer = PIXI.autoDetectRenderer(800, 600, { view: gameContent });
 
@@ -80,12 +83,25 @@ angular.module('spacial_conquest')
 
     connect () {
         if (!this.username || !this.password) return;
+        this.$http.post('/api/users/auth', {
+            username: this.username,
+            password: this.password
+        }).then((res: ng.IHttpPromiseCallbackArg<string>) => {
+            this.myShip = new Spaceship(this.stage, true);
+            this.ships[this.username] = this.myShip;
 
-        this.myShip = new Spaceship(this.stage, true);
-        this.ships[this.username] = this.myShip;
+            let lm = new Messages.Login(this.username, this.password);
+            this.sendMessage(lm);
+        }).catch(function (res: ng.IHttpPromiseCallbackArg<string>) {
+            if (res.status === 404) {
+                console.log('Username not found.');
+            } else if (res.status === 401) {
+                console.log('Password invalid');
+            } else {
+                console.log('Unknown error occurred');
+            }
+        });
 
-        let lm = new Messages.Login(this.username, this.password);
-        this.sendMessage(lm);
     }
 
     sendMessage (message: Messages.Message) {

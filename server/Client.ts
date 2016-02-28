@@ -4,6 +4,7 @@ import * as p2 from 'p2';
 
 import * as Messages from '../shared/Messages';
 import Movements from '../shared/Movements';
+import { IUser, User } from './api/user/user.model';
 import Game from './Game';
 
 export default class Client {
@@ -48,10 +49,6 @@ export default class Client {
 
     onUserLogin = (message: Messages.Login) => {
         console.log('LoginMessage:', message);
-
-        // Check auth
-        // this.server.checkUsername(this.username);
-
         this.username = message.username;
 
         this.body = new p2.Body({
