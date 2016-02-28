@@ -7,6 +7,8 @@ import Movements from '../shared/Movements';
 import { IUser, User } from './api/user/user.model';
 import Game from './Game';
 
+const console = (<any>process).console;
+
 export default class Client {
     static ACCELERATION: number = 10;
     static ROTATION: number = 2;
