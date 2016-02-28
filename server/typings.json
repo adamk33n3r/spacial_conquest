@@ -6,6 +6,7 @@
     "mongoose": "github:DefinitelyTyped/DefinitelyTyped/mongoose/mongoose.d.ts#cebde64b3a1d63d07ee7c7dbc49b631ce220d027",
     "morgan": "github:DefinitelyTyped/DefinitelyTyped/morgan/morgan.d.ts#4566a913a3667dc627851d0f7f38ffcd0e7cf6ea",
     "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#bcd5761826eb567876c197ccc6a87c4d05731054",
+    "p2": "github:adamk33n3r/DefinitelyTyped/p2/p2.d.ts#d0dba7e753efcdbf3c032bdb8fa200ebd92d50b6",
     "serve-static": "github:DefinitelyTyped/DefinitelyTyped/serve-static/serve-static.d.ts#0fa4e9e61385646ea6a4cba2aef357353d2ce77f",
     "socket.io": "github:DefinitelyTyped/DefinitelyTyped/socket.io/socket.io.d.ts#bcd5761826eb567876c197ccc6a87c4d05731054"
   }

@@ -1,47 +1,121 @@
 'use strict';
 
-import {Message, NewUserMessage, LoginMessage} from '../../../../shared/Messages';
+import * as Messages from '../../../../shared/Messages';
+import Spaceship from '../../game/Spaceship';
+import Enemy from '../../game/Enemy';
 
-import Phaser = require('phaser');
+import PIXI = require('pixi.js');
 
 import angular = require('angular');
 angular.module('spacial_conquest')
 .controller('HomeController', class {
-    test: string;
     username: string;
+    password: string;
+
     socket: SocketIOClient.Socket;
-    game: Phaser.Game;
+
+    renderer: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
+    stage: PIXI.Container;
+
+    ships: { [id: string]: Spaceship; } = { };
+    myShip: Spaceship;
 
     constructor ($http: ng.IHttpService) {
-        this.test = 'This is a string defined in the controller!';
+        let gameContent = <HTMLCanvasElement>document.getElementById('gameContent');
+        this.renderer = PIXI.autoDetectRenderer(800, 600, { view: gameContent });
 
-        this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameContent', { preload: this.preload, create: this.create });
+        this.stage = new PIXI.Container();
+
+        let starfield: PIXI.Texture = PIXI.Texture.fromImage('/images/starfield.png');
+        let tilingSprite: PIXI.extras.TilingSprite = new PIXI.extras.TilingSprite(
+            starfield,
+            this.renderer.width,
+            this.renderer.height);
+        this.stage.addChild(tilingSprite);
+
+        requestAnimationFrame(this.animate);
 
         this.socket = io();
-        this.socket.on(NewUserMessage.type, function (data: NewUserMessage) {
-            console.log('New User Message: ' + data.username);
-        });
-        console.log();
+        this.socket.on(Messages.NewUser.type, this.onNewUserMessage);
+        this.socket.on(Messages.Move.type, this.onMoveUserMessage);
+        this.socket.on(Messages.Disconnect.type, this.onLeftUserMessage);
     }
 
+    animate = () => {
+        requestAnimationFrame(this.animate);
+
+        // render the container
+        this.renderer.render(this.stage);
+    };
+
+    onNewUserMessage = (msg: Messages.NewUser) => {
+        // Create a new spaceship
+        console.log('create ship for: ', msg.username);
+        this.ships[msg.username] = new Spaceship(this.stage, false);
+    };
+
+    onMoveUserMessage = (msg: Messages.Move) => {
+        let ship: Spaceship = this.ships[msg.username];
+        if (ship) {
+            ship.setState(
+                msg.position,
+                msg.velocity,
+                msg.force,
+                msg.angle,
+                msg.angularVelocity,
+                msg.angularForce);
+        }
+    };
+
+    onLeftUserMessage = (msg: Messages.Disconnect) => {
+        console.log('Destroying ship: ', msg);
+
+        let ship: Spaceship = this.ships[msg.username];
+        if (ship !== null) {
+            ship.destroy();
+        }
+
+        delete this.ships[msg.username];
+    };
+
     connect () {
-        if (!this.username) return;
-        let lm: LoginMessage = new LoginMessage(this.username, null);
+        if (!this.username || !this.password) return;
+
+        this.myShip = new Spaceship(this.stage, true);
+        this.ships[this.username] = this.myShip;
+
+        let lm = new Messages.Login(this.username, this.password);
         this.sendMessage(lm);
     }
 
-    sendMessage (message: Message) {
+    sendMessage (message: Messages.Message) {
         console.log('Sending:', message);
         this.socket.emit(message.type, message);
     }
 
-    preload() {
-        this.game.load.image('top-secret', 'images/top-secret.jpg');
-    }
+    preload = () => {
+        /*
+        this.game.load.image('starfield', 'images/starfield.png');
+        this.game.load.image('player', 'images/player.png');
+        */
+    };
 
-    create() {
-        let topSecret: Phaser.Sprite = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'top-secret');
-        topSecret.anchor.setTo(0.5, 0.5);
-    }
+    create = () => {
+        // This is where we init to use P2JS physics, which causes phaser to die
+        // You have to view it in a browser to see the error in the console:
+        //    Uncaught TypeError: Phaser.Physics.P2 is not a function
+        // this.game.physics.startSystem(Phaser.Physics.P2JS);
+        // this.game.world.setBounds(0, 0, 1600, 1200);
+
+        // this.starfield = this.game.add.tileSprite(0, 0, 1600, 1200, 'starfield');
+    };
+
+    update = () => {
+        if (this.myShip) {
+            if (this.myShip.update()) {
+                // Only send if changed
+                this.sendMessage(new Messages.TryMove(this.myShip.move));
+            }
+        }
+    };
 });
-
