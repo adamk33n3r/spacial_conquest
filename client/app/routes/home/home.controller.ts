@@ -12,6 +12,7 @@ angular.module('spacial_conquest')
     $http: ng.IHttpService;
     username: string;
     password: string;
+    isLoggedIn: boolean;
 
     socket: SocketIOClient.Socket;
 
@@ -71,15 +72,20 @@ angular.module('spacial_conquest')
     };
 
     onLeftUserMessage = (msg: Messages.Disconnect) => {
-        console.log('Destroying ship: ', msg);
+        console.log('Disconnect:', msg);
+        this.removeShip(msg.username);
+    };
 
-        let ship: Spaceship = this.ships[msg.username];
+    removeShip(username: string) {
+        console.log('Destroying ship: ', username);
+
+        let ship: Spaceship = this.ships[username];
         if (ship !== null) {
             ship.destroy();
         }
 
-        delete this.ships[msg.username];
-    };
+        delete this.ships[username];
+    }
 
     connect () {
         if (!this.username || !this.password) return;
@@ -87,6 +93,7 @@ angular.module('spacial_conquest')
             username: this.username,
             password: this.password
         }).then((res: ng.IHttpPromiseCallbackArg<string>) => {
+            this.isLoggedIn = true;
             this.myShip = new Spaceship(this.stage, true);
             this.ships[this.username] = this.myShip;
 
@@ -102,6 +109,26 @@ angular.module('spacial_conquest')
             }
         });
 
+    }
+
+    register () {
+        this.$http.post('/api/users', {
+            username: this.username,
+            password: this.password
+        }).then((res: ng.IHttpPromiseCallbackArg<any>) => {
+            this.connect();
+        }).catch((res: ng.IHttpPromiseCallbackArg<any>) => {
+            console.log('Error while registering', res);
+            for (let name in res.data.errors) {
+                let error = res.data.errors[name];
+                console.log(error.message);
+            }
+        });
+    }
+
+    disconnect () {
+        this.isLoggedIn = false;
+        this.removeShip(this.username);
     }
 
     sendMessage (message: Messages.Message) {

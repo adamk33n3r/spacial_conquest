@@ -1,16 +1,20 @@
 .panel.panel-default
   .panel-body
-    form.form-horizontal
-      .form-group
-        canvas#gameContent.col-lg-10.col-lg-offset-2
-      .form-group
-        label.control-label.col-lg-2(for="username") Username:
-        .col-lg-10
-          input#username.form-control(type="text", ng-model="home.username")
-      .form-group
-        label.control-label.col-lg-2(for="password") Password:
-        .col-lg-10
-          input#username.form-control(type="password", ng-model="home.password")
-      .form-group
-        .col-lg-10.col-lg-offset-2
-          button.btn.btn-success(type="button", ng-click="home.connect()") Connect
+    .row: canvas#gameContent.col-xs-12
+    .row.row-margin
+      .col-xs-12
+        div(ng-if="home.isLoggedIn")
+          button.btn.btn-danger(type="button", ng-click="home.disconnect()") Disconnect
+        form.form-horizontal(ng-if="!home.isLoggedIn")
+          .form-group
+            label.control-label.col-md-2(for="username") Username:
+            .col-md-10
+              input#username.form-control(type="text", ng-model="home.username")
+          .form-group
+            label.control-label.col-md-2(for="password") Password:
+            .col-md-10
+              input#username.form-control(type="password", ng-model="home.password")
+          .form-group
+            .col-md-10.col-md-offset-2
+              button.btn.btn-success(type="button", ng-click="home.connect()") Connect
+              button.btn.btn-primary(type="button", ng-click="home.register()") Register
